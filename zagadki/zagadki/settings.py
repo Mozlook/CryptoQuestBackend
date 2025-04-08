@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
                 "209.38.250.130",
-                "mmozoluk.com"]
+                "mmozoluk.com",
+                "www.mmozoluk.com"]
 
 
 # Application definition
