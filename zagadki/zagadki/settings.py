@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-b+skt4kepj(96p7!*j$kyl+1qm-8u5$lxr=d_+8)2!_5=jjf$y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://crypticquest.netlify.app/']
 
 
 # Application definition
@@ -80,11 +80,14 @@ WSGI_APPLICATION = 'zagadki.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_db_name',
+        'USER': 'your_db_user',
+        'PASSWORD': 'your_db_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
