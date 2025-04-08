@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'zagadki.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_db_name',
-        'USER': 'your_db_user',
-        'PASSWORD': 'your_db_password',
+        'NAME': 'cryptoquest',
+        'USER': 'mozlook',
+        'PASSWORD': 'Ekko!trick44',
         'HOST': 'localhost',
         'PORT': '5432',
     }
