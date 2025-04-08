@@ -1,6 +1,10 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import Zagadki
+from .models import Zagadki, Bledy
+from .serializers import BledySerializer
 import json
 
 @csrf_exempt
@@ -28,3 +32,10 @@ def sprawdz_zagadke(request):
     else:
         # Obsługuje tylko POST, inne metody zwracają błąd
         return JsonResponse({'error': 'Metoda dozwolona to POST'}, status=405)
+
+class BledyList(APIView):
+    def post(self, request):
+        serializer = BledySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
