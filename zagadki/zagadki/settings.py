@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-b+skt4kepj(96p7!*j$kyl+1qm-8u5$lxr=d_+8)2!_5=jjf$y
 DEBUG = True
 
 ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
-                "209.38.250.130"]
+                "209.38.250.130",
+                "mmozoluk.com"]
 
 
 # Application definition
