@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import sprawdz_zagadke, BledyList, get_csrf_token
+from .views import sprawdz_zagadke, BledyList, get_csrf_token, LoginView, UpdateProgressView
 
 urlpatterns = [
     path('sprawdz/', sprawdz_zagadke, name='sprawdz_zagadke'),
