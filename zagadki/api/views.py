@@ -4,8 +4,9 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .models import Zagadki, Bledy
-from .serializers import BledySerializer
+from .serializers import BledySerializer, LoginSerializer, UserSerializer
 from django.middleware.csrf import get_token
+from django.contrib.auth import login
 import json
 
 
@@ -34,13 +35,6 @@ def sprawdz_zagadke(request):
         # Obsługuje tylko POST, inne metody zwracają błąd
         return JsonResponse({'error': 'Metoda dozwolona to POST'}, status=405)
 
-class BledyList(APIView):
-    def post(self, request):
-        serializer = BledySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-
 def get_csrf_token(request):
     csrf_token = get_token(request)
     response_data = {
@@ -59,3 +53,29 @@ def get_csrf_token(request):
     )
     
     return response
+
+class BledyList(APIView):
+    def post(self, request):
+        serializer = BledySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data
+            login(request, user)
+            return Response({'message': 'Login successful', 'user_id': user.id, 'progres': user.progres})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateProgressView(APIView):
+    def post(self, request):
+        user = request.user
+        progres = request.data.get('progres')
+        if progres is not None:
+            user.progres = progres
+            user.save()
+            return Response({'message': 'Progress updated', 'progres': user.progres})
+        return Response({'error': 'Progress value missing'}, status=status.HTTP_400_BAD_REQUEST)
