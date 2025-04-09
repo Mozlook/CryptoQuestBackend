@@ -42,6 +42,20 @@ class BledyList(APIView):
             return Response(serializer.data)
 
 def get_csrf_token(request):
-    response = JsonResponse({"detail": "CSRF cookie set"})
-    response["X-CSRFToken"] = get_token(request) 
+    csrf_token = get_token(request)
+    response_data = {
+        "detail": "CSRF token generated",
+        "csrftoken": csrf_token 
+    }
+    response = JsonResponse(response_data)
+    
+    response.set_cookie(
+        'csrftoken',
+        csrf_token,
+        max_age=3600,
+        secure=True,
+        httponly=False,
+        samesite='None' 
+    )
+    
     return response
