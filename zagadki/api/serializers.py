@@ -41,10 +41,4 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(username=data['username'], password=data['password'])
         if user is None:
             raise serializers.ValidationError("Invalid credentials")
-        
-        # Generowanie tokenów
-        refresh = RefreshToken.for_user(user)
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token)
-        }
+        return user  # Zwracamy użytkownika

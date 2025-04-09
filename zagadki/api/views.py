@@ -67,21 +67,20 @@ class BledyList(APIView):
 
 class LoginView(APIView):
     def post(self, request):
-        try:
-            serializer = LoginSerializer(data=request.data)
-            if serializer.is_valid():
-                user = serializer.validated_data
-                refresh = RefreshToken.for_user(user)
-                return Response({
-                    'message': 'Login successful',
-                    'access': str(refresh.access_token), 
-                    'refresh': str(refresh),
-                    'user_id': user.id,
-                    'progres': user.progres
-                })
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data 
+
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'message': 'Login successful',
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user_id': user.id,
+                'progres': user.progres
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UpdateProgressView(APIView):
     permission_classes = [IsAuthenticated]
