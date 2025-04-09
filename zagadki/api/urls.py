@@ -5,7 +5,4 @@ urlpatterns = [
     path('sprawdz/', sprawdz_zagadke, name='sprawdz_zagadke'),
     path('bledy/', BledyList.as_view(), name='BledyList'),
     path('get-csrf/', get_csrf_token, name='get_csrf'),
-    path('register/', RegisterUserView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('update-progress/', UpdateProgressView.as_view(), name='update-progress'),
 ]
