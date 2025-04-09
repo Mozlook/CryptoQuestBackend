@@ -36,7 +36,10 @@ CSRF_TRUSTED_ORIGINS = [
     # Add other trusted domains if needed
 ]
 
-# Application definition
+CORS_ALLOWED_ORIGINS = [
+    "https://crypticquest.netlify.app",
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -76,7 +79,9 @@ SIMPLE_JWT = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'None'
+CORS_EXPOSE_HEADERS = ['Set-Cookie']
 ROOT_URLCONF = 'zagadki.urls'
 
 TEMPLATES = [
