@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .models import Zagadki, Bledy
 from .serializers import BledySerializer
+from django.middleware.csrf import get_token
 import json
 
 
@@ -39,3 +40,8 @@ class BledyList(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+
+def get_csrf_token(request):
+    response = JsonResponse({"detail": "CSRF cookie set"})
+    response["X-CSRFToken"] = get_token(request) 
+    return response
