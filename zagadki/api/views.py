@@ -4,7 +4,7 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .models import Zagadki, Bledy
-from .serializers import BledySerializer, LoginSerializer, UserSerializer
+from .serializers import BledySerializer
 from django.middleware.csrf import get_token
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
