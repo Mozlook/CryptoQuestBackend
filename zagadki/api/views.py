@@ -7,7 +7,7 @@ from .models import Zagadki, Bledy
 from .serializers import BledySerializer
 import json
 
-@csrf_exempt
+
 def sprawdz_zagadke(request):
     if request.method == 'POST':  # Tylko POST
         try:
