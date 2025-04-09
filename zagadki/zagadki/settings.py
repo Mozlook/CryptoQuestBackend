@@ -32,9 +32,9 @@ ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
 
 CSRF_TRUSTED_ORIGINS = [
     'https://mmozoluk.com',
+    'https://crypticquest.netlify.app',
     # Add other trusted domains if needed
 ]
-
 
 # Application definition
 
@@ -73,7 +73,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
-
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'zagadki.urls'
 
