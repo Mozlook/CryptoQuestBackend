@@ -30,6 +30,11 @@ ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
                 "mmozoluk.com",
                 "www.mmozoluk.com"]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://mmozoluk.com',
+    # Add other trusted domains if needed
+]
+
 
 # Application definition
 
