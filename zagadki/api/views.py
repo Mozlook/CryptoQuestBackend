@@ -7,6 +7,9 @@ from .models import Zagadki, Bledy
 from .serializers import BledySerializer, LoginSerializer, UserSerializer
 from django.middleware.csrf import get_token
 from django.contrib.auth import login
+from django.contrib.auth import get_user_model
+from rest_framework.serializers import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
 import json
 
 
@@ -66,16 +69,36 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data
-            login(request, user)
-            return Response({'message': 'Login successful', 'user_id': user.id, 'progres': user.progres})
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'message': 'Login successful',
+                'access': str(refresh.access_token), 
+                'refresh': str(refresh),
+                'user_id': user.id,
+                'progres': user.progres
+            })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateProgressView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        user = request.user
+        user = request.user 
         progres = request.data.get('progres')
+        
         if progres is not None:
-            user.progres = progres
-            user.save()
+            user.progres = progres 
+            user.save() 
             return Response({'message': 'Progress updated', 'progres': user.progres})
+        
         return Response({'error': 'Progress value missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+class RegisterUserView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({'message': 'User registered successfully!'}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
