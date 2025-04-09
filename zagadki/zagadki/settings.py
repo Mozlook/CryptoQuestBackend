@@ -85,6 +85,8 @@ CSRF_COOKIE_SAMESITE = 'None'
 CORS_EXPOSE_HEADERS = ['Set-Cookie']
 ROOT_URLCONF = 'zagadki.urls'
 
+AUTH_USER_MODEL = 'api.Users'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
