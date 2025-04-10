@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators import api_view
+# from django.views.decorators import api_view
 from django.http import JsonResponse
 from .models import Zagadki, Bledy
 from .serializers import BledySerializer, RegistrationSerializer
@@ -66,8 +66,7 @@ class BledyList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-    
-@api_view(['POST'])
+
 def registration_view(request):
     if request.method == 'POST':
         serializer = RegistrationSerializer(data=request.data)
