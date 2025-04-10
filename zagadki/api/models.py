@@ -25,5 +25,5 @@ class User(AbstractUser):
     last_name = None
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
