@@ -1,32 +1,28 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ValidationError
 from rest_framework import status
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from .models import Zagadki, Bledy
 from .serializers import BledySerializer, RegistrationSerializer
 from django.middleware.csrf import get_token
-from django.contrib.auth import login
-from django.contrib.auth import get_user_model
-from rest_framework.serializers import ValidationError
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import login, authenticate, get_user_model
+from rest_framework.authtoken.models import Token
 import json
 
-
 def sprawdz_zagadke(request):
-    if request.method == 'POST':  # Tylko POST
+    if request.method == 'POST':
         try:
-            # Parsowanie danych JSON
+            
             data = json.loads(request.body)
             numer_zagadki = data.get('numer')
             odpowiedz = data.get('tekst')
 
-            # Znalezienie zagadki na podstawie numeru
             zagadka = Zagadki.objects.get(numer=numer_zagadki)
             
-            # Sprawdzanie, czy odpowiedź jest poprawna
             if odpowiedz == zagadka.kod:
                 return JsonResponse({'result': True})
             else:
@@ -37,7 +33,6 @@ def sprawdz_zagadke(request):
             return JsonResponse({'error': str(e)}, status=400)
     
     else:
-        # Obsługuje tylko POST, inne metody zwracają błąd
         return JsonResponse({'error': 'Metoda dozwolona to POST'}, status=405)
 
 def get_csrf_token(request):
@@ -66,6 +61,7 @@ class BledyList(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
 @api_view(['POST'])
 def registration_view(request):
     if request.method == 'POST':
