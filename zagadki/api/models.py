@@ -24,7 +24,7 @@ class User(AbstractUser):
     first_name = None
     last_name = None
 
-    class Meta:
-        db_table = 'users' 
-        verbose_name = _('User')
-        verbose_name_plural = _('Users')
+    # class Meta:
+    #     db_table = 'users' 
+    #     verbose_name = _('User')
+    #     verbose_name_plural = _('Users')
