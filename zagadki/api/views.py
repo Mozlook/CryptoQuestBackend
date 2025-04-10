@@ -63,6 +63,5 @@ class BledyList(APIView):
         serializer = BledySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        else:
-            return "nieprawidlowe dane"
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
