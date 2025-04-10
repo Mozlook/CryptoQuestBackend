@@ -6,4 +6,4 @@ from .models import Zagadki, Bledy
 
 admin.site.register(Zagadki)
 admin.site.register(Bledy)
-admin.site.register(User)
+# admin.site.register(User)
