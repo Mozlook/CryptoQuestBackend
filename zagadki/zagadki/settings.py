@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
                 "209.38.250.130",
                 "mmozoluk.com",
-                "www.mmozoluk.com"]
+                "www.mmozoluk.com",
+                "api.mmozoluk.com",]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://mmozoluk.com',
