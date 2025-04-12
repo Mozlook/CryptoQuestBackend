@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['https://crypticquest.netlify.app/',
                 "api.mmozoluk.com",]
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://www.mmozoluk.com',
     'https://mmozoluk.com',
     'https://crypticquest.netlify.app',
     'https://api.mmozoluk.com'
@@ -40,6 +41,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://crypticquest.netlify.app",
+    'https://mmozoluk.com',
+    'https://www.mmozoluk.com',
 ]
 
 AUTH_USER_MODEL = 'api.User'
