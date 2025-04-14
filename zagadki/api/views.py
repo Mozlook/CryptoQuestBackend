@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.serializers import ValidationError
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -22,6 +22,30 @@ class SprawdzProgres(APIView):
             "progress": progress
         })
 
+class SprawdzOdpowiedz(ApiView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        user = request.user if request.user and request.user.is_authenticated else None
+        odpowiedz = request.data.get('answer')
+
+        if not odpowiedz_uzytkownika:
+            return Response({'error': 'Brak odpowiedzi'}, status=status.HTTP_400_BAD_REQUEST)
+
+        numer_zagadki = user.progress if user else 1
+
+        try:
+            zagadka = Zagadki.objects.get(numer=numer_zagadki)
+        except Zagadki.DoesNotExist:
+            return Response({'error': 'Nie znaleziono zagadki'}, status=status.HTTP_404_NOT_FOUND)
+
+        if odpowiedz.strip().lower() == zagadka.kod.strip().lower():
+            return Response({'answer': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'answer': False}, status=status.HTTP_200_OK)
+        
+    
 def get_csrf_token(request):
     csrf_token = get_token(request)
     response_data = {
