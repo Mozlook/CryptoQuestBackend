@@ -13,27 +13,15 @@ from django.contrib.auth import login, authenticate, get_user_model
 from rest_framework.authtoken.models import Token
 import json
 
-def sprawdz_zagadke(request):
-    if request.method == 'POST':
-        try:
-            
-            data = json.loads(request.body)
-            numer_zagadki = data.get('numer')
-            odpowiedz = data.get('tekst')
+class SprawdzProgres(APIView):
+    permission_classes = [IsAuthenticated]
 
-            zagadka = Zagadki.objects.get(numer=numer_zagadki)
-            
-            if odpowiedz == zagadka.kod:
-                return JsonResponse({'result': True})
-            else:
-                return JsonResponse({'result': False})
-        except Zagadki.DoesNotExist:
-            return JsonResponse({'error': 'Zagadki o takim numerze nie znaleziono'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    
-    else:
-        return JsonResponse({'error': 'Metoda dozwolona to POST'}, status=405)
+    def get(self, request):
+        user = request.user
+        progress = user.progress
+        return Response({
+            "message": f"Witaj {user.username}, twoj progres {progress}"
+        })
 
 def get_csrf_token(request):
     csrf_token = get_token(request)
