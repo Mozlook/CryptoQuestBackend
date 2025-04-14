@@ -118,7 +118,7 @@ class LoginView(APIView):
             
             try:
                 progress = int(progress)
-                if progress < 3 and user.progres == 1:
+                if progress < 3 and user.progress == 1:
                     user.progress = progress
                     user.save()
             except (TypeError, ValueError):
