@@ -30,7 +30,7 @@ class SprawdzOdpowiedz(APIView):
         user = request.user if request.user and request.user.is_authenticated else None
         odpowiedz = request.data.get('answer')
 
-        if not odpowiedz_uzytkownika:
+        if not odpowiedz:
             return Response({'error': 'Brak odpowiedzi'}, status=status.HTTP_400_BAD_REQUEST)
 
         numer_zagadki = user.progress if user else 1
