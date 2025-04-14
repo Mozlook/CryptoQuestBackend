@@ -110,10 +110,19 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
+        progress = request.data.get('progress')
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            
+            try:
+                progress = int(progress)
+                if progress < 3 and user.progres == 1:
+                    user.progress = progress
+                    user.save()
+            except (TypeError, ValueError):
+                pass
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key}, status=status.HTTP_200_OK)
 
