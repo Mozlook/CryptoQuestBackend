@@ -41,7 +41,13 @@ class SprawdzOdpowiedz(APIView):
             return Response({'error': 'Nie znaleziono zagadki'}, status=status.HTTP_404_NOT_FOUND)
 
         if odpowiedz.strip().lower() == zagadka.kod.strip().lower():
-            return Response({'answer': True}, status=status.HTTP_200_OK)
+            if user:
+                user.progress += 1
+                user.save()
+                return Response({'answer': True}, status=status.HTTP_200_OK)
+            else:
+                return Response({'answer':True,
+                                 'progress': 2}, status=status.HTTP_200_OK)
         else:
             return Response({'answer': False}, status=status.HTTP_200_OK)
         
