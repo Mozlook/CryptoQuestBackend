@@ -22,7 +22,7 @@ class SprawdzProgres(APIView):
             "progress": progress
         })
 
-class SprawdzOdpowiedz(ApiView):
+class SprawdzOdpowiedz(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [AllowAny]
     
