@@ -17,10 +17,9 @@ class SprawdzProgres(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        progress = user.progress
+        progress = request.user.progress
         return Response({
-            "message": f"Witaj {user.username}, twoj progres {progress}"
+            "progress": progress
         })
 
 def get_csrf_token(request):
