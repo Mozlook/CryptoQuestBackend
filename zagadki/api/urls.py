@@ -6,7 +6,7 @@ urlpatterns = [
     path('get-csrf/', get_csrf_token, name='get_csrf'),
     path('register/', registration_view, name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    path('api/sprawdz-progres/', SprawdzProgres.as_view(), name='sprawdz-progress'),
+    path('sprawdz-progres/', SprawdzProgres.as_view(), name='sprawdz-progress'),
 
     
 ]
