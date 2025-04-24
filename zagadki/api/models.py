@@ -13,6 +13,7 @@ class Zagadki(models.Model):
 class Bledy(models.Model):
     numer = models.CharField(max_length=25)
     opis = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='uploads/', null=True, blank=True)
 
     def __str__(self):
         return f"Zagadka {self.numer}"

@@ -11,7 +11,7 @@ class ZagadkiSerializer(serializers.ModelSerializer):
 class BledySerializer(serializers.ModelSerializer):
     class Meta:
         model = Bledy
-        fields = ['id', 'numer', 'opis']
+        fields = ['id', 'numer', 'opis','image']
         
 class RegistrationSerializer(serializers.ModelSerializer):
     

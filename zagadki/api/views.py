@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -72,6 +73,8 @@ def get_csrf_token(request):
     return response
 
 class BledyList(APIView):
+    parser_classes = [MultiPartParser, FormParser] 
+    
     def post(self, request):
         serializer = BledySerializer(data=request.data)
         if serializer.is_valid():
