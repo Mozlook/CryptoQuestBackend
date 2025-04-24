@@ -28,7 +28,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate(self, data):
         
         if data['password'] != data['password2']:
-            raise serializers.ValidationError({'password': 'Hasła muszą być identyczne!'})
+            raise serializers.ValidationError({'password': "Passwords don't match!"})
+        if len(data['password']) < 6:
+            raise serializers.ValidationError({'password': 'Password needs to be atleas 6 characters long!'})
         return data
         
     def create(self, validated_data):
