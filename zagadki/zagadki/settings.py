@@ -41,6 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://crypticquest.netlify.app",
+    "https://crypticquest.mmozoluk.com",
     'https://mmozoluk.com',
     'https://www.mmozoluk.com',
 ]
