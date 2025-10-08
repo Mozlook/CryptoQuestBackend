@@ -1,124 +1,125 @@
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.serializers import ValidationError
-from rest_framework import status
-from rest_framework.decorators import api_view
+from django.contrib.auth import authenticate
 from django.http import JsonResponse
-from .models import Zagadki, Bledy
-from .serializers import BledySerializer, RegistrationSerializer
 from django.middleware.csrf import get_token
-from django.contrib.auth import login, authenticate, get_user_model
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-import json
+from rest_framework.decorators import api_view
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import Zagadki
+from .serializers import BledySerializer, RegistrationSerializer
+
 
 class SprawdzProgres(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         progress = request.user.progress
-        return Response({
-            "progress": progress
-        })
+        return Response({"progress": progress})
+
 
 class SprawdzOdpowiedz(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         user = request.user if request.user and request.user.is_authenticated else None
-        odpowiedz = request.data.get('answer')
+        odpowiedz = request.data.get("answer")
 
         if not odpowiedz:
-            return Response({'error': 'Brak odpowiedzi'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Brak odpowiedzi"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         numer_zagadki = user.progress if user else 1
 
         try:
             zagadka = Zagadki.objects.get(numer=numer_zagadki)
         except Zagadki.DoesNotExist:
-            return Response({'error': 'Nie znaleziono zagadki'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Nie znaleziono zagadki"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         if odpowiedz.strip().lower() == zagadka.kod.strip().lower():
             if user:
                 user.progress += 1
                 user.save()
-                return Response({'answer': True}, status=status.HTTP_200_OK)
+                return Response({"answer": True}, status=status.HTTP_200_OK)
             else:
-                return Response({'answer':True,
-                                 'progress': 2}, status=status.HTTP_200_OK)
+                return Response(
+                    {"answer": True, "progress": 2}, status=status.HTTP_200_OK
+                )
         else:
-            return Response({'answer': False}, status=status.HTTP_200_OK)
-        
-    
+            return Response({"answer": False}, status=status.HTTP_200_OK)
+
+
 def get_csrf_token(request):
     csrf_token = get_token(request)
-    response_data = {
-        "detail": "CSRF token generated",
-        "csrftoken": csrf_token 
-    }
+    response_data = {"detail": "CSRF token generated", "csrftoken": csrf_token}
     response = JsonResponse(response_data)
-    
+
     response.set_cookie(
-        'csrftoken',
+        "csrftoken",
         csrf_token,
         max_age=3600,
         secure=True,
         httponly=False,
-        samesite='None' 
+        samesite="None",
     )
-    
+
     return response
 
+
 class BledyList(APIView):
-    parser_classes = [MultiPartParser, FormParser] 
-    
+    parser_classes = [MultiPartParser, FormParser]
+
     def post(self, request):
         serializer = BledySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-    
-@api_view(['POST'])
+
+
+@api_view(["POST"])
 def registration_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         serializer = RegistrationSerializer(data=request.data)
-        
+
         if not serializer.is_valid():
             return Response(
-                {'errors': serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST
+                {"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
             )
-            
+
         try:
             user = serializer.save()
             return Response(
                 {
-                    'message': 'User created successfully',
-                    'email': user.email,
-                    'username': user.username
+                    "message": "User created successfully",
+                    "email": user.email,
+                    "username": user.username,
                 },
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_201_CREATED,
             )
         except Exception as e:
             return Response(
-                {'error': str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
 
 class LoginView(APIView):
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        progress = request.data.get('progress')
+        username = request.data.get("username")
+        password = request.data.get("password")
+        progress = request.data.get("progress")
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            
             try:
                 progress = int(progress)
                 if progress < 3 and user.progress == 1:
@@ -127,6 +128,8 @@ class LoginView(APIView):
             except (TypeError, ValueError):
                 pass
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            return Response({"token": token.key}, status=status.HTTP_200_OK)
 
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
